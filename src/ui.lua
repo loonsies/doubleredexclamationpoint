@@ -28,6 +28,10 @@ function ui.drawUI()
             targetStatus = mobStatus.normal
             utils.resetClickedButtons()
         end
+        imgui.SameLine()
+        if imgui.Checkbox('Lock weapon names', drep.config.locked) then
+            settings.save()
+        end
         imgui.Separator()
 
         -- Dagger

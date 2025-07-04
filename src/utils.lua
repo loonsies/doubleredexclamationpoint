@@ -290,8 +290,13 @@ function utils.labeledInput(label, inputId, inputTable)
         ui.maxLabelWidth = labelWidth
     end
 
+    local flags = nil
+    if drep.config.locked[1] then
+        flags = ImGuiInputTextFlags_ReadOnly
+    end
+
     imgui.SetNextItemWidth(200)
-    local changed = imgui.InputText(inputId, inputTable, 48)
+    local changed = imgui.InputText(inputId, inputTable, 48, flags)
     imgui.SameLine()
 
     if label == currentWeapon then

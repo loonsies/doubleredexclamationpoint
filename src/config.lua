@@ -10,6 +10,7 @@ local default = T {
     greatKatanaItem = { '' },
     clubItem = { '' },
     staffItem = { '' },
+    locked = { false }
 }
 
 config.load = function ()
