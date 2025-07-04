@@ -187,7 +187,6 @@ function ui.update()
     local targetId = utils.getTarget()
     if not targetId or targetId == 0 then
         targetStatus = mobStatus.normal
-        return
     end
 
     if utils.mobActionState[targetId] and utils.mobActionState[targetId] < now then
