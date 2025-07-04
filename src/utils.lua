@@ -3,6 +3,18 @@ utils = {}
 utils.clickedButtons = {}
 utils.mobActionState = T {}
 
+function utils.getDistance()
+    local targetMgr = AshitaCore:GetMemoryManager():GetTarget()
+    local mainTarget = targetMgr:GetTargetIndex(0)
+    local entity = GetEntity(mainTarget)
+    if entity == nil then
+        return -1
+    end
+    local distance = entity.Distance:sqrt()
+
+    return distance
+end
+
 function utils.getTarget()
     local targetMgr = AshitaCore:GetMemoryManager():GetTarget()
     local currentTarget = targetMgr:GetTargetIndex(0)
@@ -180,9 +192,22 @@ function utils.weaponskill(name, buttonId)
         return
     end
 
-    lastWeaponSkill = name
-    utils.clickedButtons[buttonId] = true
+    if utils.getDistance() > 3 or utils.getDistance() == -1 then
+        print(chat.header(addon.name):append(chat.error('Too far away')))
+        return
+    end
+
     AshitaCore:GetChatManager():QueueCommand(-1, string.format('/ws "%s" <t>', name))
+
+    local prevTP = utils.getTP()
+    ashita.tasks.once(1, function ()
+        if prevTP > utils.getTP() then
+            lastWeaponSkill = name
+            utils.clickedButtons[buttonId] = true
+        else
+            print(chat.header(addon.name):append(chat.error('Weaponskill failed')))
+        end
+    end)
 end
 
 function utils.getEquippedItemId(slot)
