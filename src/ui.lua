@@ -203,6 +203,16 @@ function ui.update()
         utils.resetClickedButtons()
     end
 
+    local itemId, bag = utils.getEquippedItemId(0)
+
+    if itemId ~= nil and itemId ~= 0 then
+        local item = AshitaCore:GetResourceManager():GetItemById(itemId)
+
+        if item ~= nil and item.Name ~= nil and item.Name[1] ~= nil then
+            currentWeapon = item.Name[1]
+        end
+    end
+
     if not drep.visible[1] then
         return
     end
