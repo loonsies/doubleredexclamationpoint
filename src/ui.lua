@@ -170,7 +170,7 @@ function ui.drawUI()
             utils.weaponskill('Sunburst', 'Sunburst')
         end
 
-        imgui.Separator()
+        imgui.End()
     end
 end
 
