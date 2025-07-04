@@ -192,11 +192,6 @@ function utils.weaponskill(name, buttonId)
         return
     end
 
-    if utils.getDistance() > 3 or utils.getDistance() == -1 then
-        print(chat.header(addon.name):append(chat.error('Too far away')))
-        return
-    end
-
     AshitaCore:GetChatManager():QueueCommand(-1, string.format('/ws "%s" <t>', name))
 
     local prevTP = utils.getTP()
@@ -258,8 +253,6 @@ function utils.getEquippedItemId(slot)
 end
 
 function utils.weapon(name, weaponType, buttonId)
-    currentWeapon = weaponType
-
     AshitaCore:GetChatManager():QueueCommand(-1, string.format('/equip main "%s"', name))
 
     ashita.tasks.once(1, function ()
