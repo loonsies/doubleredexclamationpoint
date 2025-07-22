@@ -2,6 +2,7 @@ utils = {}
 
 utils.clickedButtons = {}
 utils.mobActionState = T {}
+utils.firstClaimHolder = nil
 
 function utils.getDistance()
     local targetMgr = AshitaCore:GetMemoryManager():GetTarget()
@@ -91,6 +92,10 @@ function utils.getNameOfClaimHolder(targetIndex)
         return 'None'
     end
 
+    if utils.firstClaimHolder ~= nil then
+        return utils.firstClaimHolder
+    end
+
     local partyMgr = AshitaCore:GetMemoryManager():GetParty()
     if partyMgr == nil then
         return 'Error'
@@ -100,7 +105,9 @@ function utils.getNameOfClaimHolder(targetIndex)
         if partyMgr:GetMemberIsActive(i) == 1 and partyMgr:GetMemberServerId(i) == claimStatus then
             local memberEntityIndex = utils.getIndexFromId(claimStatus)
             if memberEntityIndex and memberEntityIndex ~= 0 then
-                return string.format('%s [%i]', entMgr:GetName(memberEntityIndex), partyMgr:GetMemberServerId(i))
+                local name = string.format('%s [%i]', entMgr:GetName(memberEntityIndex), partyMgr:GetMemberServerId(i))
+                utils.firstClaimHolder = name
+                return name
             else
                 return nil
             end
@@ -195,7 +202,7 @@ function utils.weaponskill(name, buttonId)
     AshitaCore:GetChatManager():QueueCommand(-1, string.format('/ws "%s" <t>', name))
 
     local prevTP = utils.getTP()
-    ashita.tasks.once(1, function ()
+    ashita.tasks.once(2, function ()
         if prevTP > utils.getTP() then
             lastWeaponSkill = name
             utils.clickedButtons[buttonId] = true
@@ -207,7 +214,17 @@ end
 
 function utils.getEquippedItemId(slot)
     local inventory = AshitaCore:GetMemoryManager():GetInventory()
+
+    if not inventory then
+        return nil, nil
+    end
+
     local equipment = inventory:GetEquippedItem(slot)
+
+    if not equipment then
+        return nil, nil
+    end
+
     local index = equipment.Index
 
     if index == nil or index == 0 then
@@ -292,13 +309,13 @@ function utils.labeledInput(label, inputId, inputTable)
     local changed = imgui.InputText(inputId, inputTable, 48, flags)
     imgui.SameLine()
 
-    if label == currentWeapon then
+    if inputTable[1] == currentWeapon then
         imgui.PushStyleColor(ImGuiCol_Text, { 1.0, 1.0, 0.0, 1.0 })
     end
 
     imgui.Text(label)
 
-    if label == currentWeapon then
+    if inputTable[1] == currentWeapon then
         imgui.PopStyleColor()
     end
 
@@ -330,6 +347,10 @@ end
 
 function utils.resetClickedButtons()
     utils.clickedButtons = {}
+end
+
+function utils.resetFirstClaimHolder()
+    utils.firstClaimHolder = nil
 end
 
 return utils

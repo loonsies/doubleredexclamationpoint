@@ -26,6 +26,7 @@ function ui.drawUI()
             currentWeapon = 'Unknown'
             lastWeaponSkill = 'None'
             targetStatus = mobStatus.normal
+            utils.resetFirstClaimHolder()
             utils.resetClickedButtons()
         end
         imgui.SameLine()
@@ -200,6 +201,7 @@ function ui.update()
     if drep.prevTargetHP == -1 or drep.prevTargetID == -1 or utils.getTarget() ~= drep.prevTargetID then
         currentWeapon = 'Unknown'
         lastWeaponSkill = 'None'
+        utils.resetFirstClaimHolder()
         utils.resetClickedButtons()
     end
 

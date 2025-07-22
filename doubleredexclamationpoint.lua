@@ -37,12 +37,13 @@ ashita.events.register('packet_in', 'packet_in_cb', function (e)
     if e.id ~= 0x028 then return end
 
     local ap = utils.parseActionPacket(e)
-    if not utils.isMonster(ap.UserIndex) then return end
 
-    local targetEntity = utils.getTarget()
-    if ap.UserIndex ~= targetEntity then return end
+    if ap and ap.Type == 7 or ap.Type == 8 then
+        if not utils.isMonster(ap.UserIndex) then return end
 
-    if ap.Type == 7 or ap.Type == 8 then
+        local targetEntity = utils.getTarget()
+        if ap.UserIndex ~= targetEntity then return end
+
         if ap.Type == 7 then
             targetStatus = mobStatus.weaponskill
         else
