@@ -225,41 +225,8 @@ function utils.getEquippedItemId(slot)
         return nil, nil
     end
 
-    local index = equipment.Index
-
-    if index == nil or index == 0 then
-        return nil, nil
-    end
-
-    local bag = 0
-
-    if index < 2048 then
-        bag = 0
-    elseif index < 2560 then
-        bag = 8
-        index = index - 2048
-    elseif index < 2816 then
-        bag = 10
-        index = index - 2560
-    elseif index < 3072 then
-        bag = 11
-        index = index - 2816
-    elseif index < 3328 then
-        bag = 12
-        index = index - 3072
-    elseif index < 3584 then
-        bag = 13
-        index = index - 3328
-    elseif index < 3840 then
-        bag = 14
-        index = index - 3584
-    elseif index < 4096 then
-        bag = 15
-        index = index - 3840
-    elseif index < 4352 then
-        bag = 16
-        index = index - 4096
-    end
+    local index = bit.band(equipment.Index, 0x00FF)
+    local bag = bit.rshift(bit.band(equipment.Index, 0xFF00), 8)
 
     local containerItem = inventory:GetContainerItem(bag, index)
     if containerItem ~= nil and containerItem.Id ~= 0 then
