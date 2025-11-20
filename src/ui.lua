@@ -174,9 +174,8 @@ function ui.drawUI()
         if utils.coloredButton('Sunburst', 'Sunburst') then
             utils.weaponskill('Sunburst', 'Sunburst')
         end
-
-        imgui.End()
     end
+    imgui.End()
 end
 
 function ui.update()
